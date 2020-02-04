@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 
 namespace SleepData
 {
@@ -15,7 +16,7 @@ namespace SleepData
             string resp = Console.ReadLine();
 
             // specify path for data file
-            string file = "/users/jgrissom/downloads/data.txt";
+            string file = "/Users/lawl2/Desktop/WCTC/2020/Spring 2020/.NET Database Programming/NETDBProgramming/data.txt";
 
             if (resp == "1")
             {
@@ -58,7 +59,38 @@ namespace SleepData
             }
             else if (resp == "2")
             {
-                // TODO: parse data file
+                if (File.Exists(file))
+                {
+                    StreamReader streamReader = new StreamReader(file);
+                    while (!streamReader.EndOfStream)
+                    {
+                        
+                        string line = streamReader.ReadLine();
+                        string[] arr = line.Split(',');
+                        string[] hours = arr[1].Split('|');
+                        Console.WriteLine("Week of {0,-20}", DateTime.Parse(arr[0]).ToString("MMM, dd, yyyy"));
+                        Console.WriteLine(" Su Mo Tu We Th Fr Sa Tot Avg");
+                        Console.WriteLine(" -- -- -- -- -- -- -- --- ---");
+                        int total = 0;
+                        foreach (var item in hours)
+                        {
+                            Console.Write("{0,3}", item);
+                            total = total + int.Parse(item);
+                        }
+
+                        decimal avg = ((decimal) total) / 7;
+                        Console.Write(" {0,3} ", total);
+                        Console.Write("{0,3}", avg.ToString().Substring(0,3));
+                        Console.WriteLine();
+                        Console.WriteLine();
+
+                    }
+                    streamReader.Close();
+                }
+                else
+                {
+                    Console.WriteLine("File does not exist");
+                }
 
             }
         }
